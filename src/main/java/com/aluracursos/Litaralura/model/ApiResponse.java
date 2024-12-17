@@ -1,12 +1,13 @@
 package com.aluracursos.Litaralura.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiResponse {
-    private List<LibroDTO> results;
+    @JsonAlias("results") List<LibroDTO> results;
 
     // Getters y Setters
     public List<LibroDTO> getResults() {

@@ -16,25 +16,22 @@ public class Libro {
 
     private Integer numeroDescargas;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "autor_id")
+    @ManyToOne
     private Autor autor;
 
     public Libro() {}
 
     // Constructor que recibe un LibroDTO
-    public Libro(LibroDTO libroD, Autor autor) {
-        this.titulo = libroD.titulo();
-        this.idioma = libroD.idiomas().get(0);
-        this.numeroDescargas = libroD.numeroDescargas() != null ? libroD.numeroDescargas() : 0;
-        this.autor = autor;
-    }
+//    public Libro(LibroDTO libroD, Autor autor) {
+//        this.titulo = libroD.titulo();
+//        this.idioma = libroD.idiomas().get(0);
+//        this.numeroDescargas = libroD.numeroDescargas() != null ? libroD.numeroDescargas() : 0;
+//    }
 
     public Libro(LibroDTO datos) {
         this.titulo = datos.titulo();
         this.idioma = datos.idiomas().get(0);
         this.numeroDescargas = datos.numeroDescargas();
-        this.autor = new Autor(datos.autores().get(0));
     }
 
     public Long getId() {

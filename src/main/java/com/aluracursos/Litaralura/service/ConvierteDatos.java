@@ -13,7 +13,6 @@ public class ConvierteDatos implements IConvierteDatos {
         try {
             // Deserializa el JSON en la clase ApiResponse, que contiene la lista de libros
             ApiResponse apiResponse = objectMapper.readValue(json, ApiResponse.class);
-
             // Verificar si la lista de resultados no está vacía
             if (apiResponse != null && apiResponse.getResults() != null && !apiResponse.getResults().isEmpty()) {
                 // Obtener el primer libro
@@ -28,4 +27,3 @@ public class ConvierteDatos implements IConvierteDatos {
         }
     }
 }
-

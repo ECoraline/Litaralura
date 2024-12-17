@@ -21,6 +21,6 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     List<Autor> todosLosAutores();
 
     @Query("SELECT a FROM Autor a WHERE LOWER(a.nombre) = LOWER(:nombre)")
-    Optional<Autor> findAutorByNombre(@Param("nombre") String nombre);
+    Autor findAutorByNombre(@Param("nombre") String nombre);
 
 }

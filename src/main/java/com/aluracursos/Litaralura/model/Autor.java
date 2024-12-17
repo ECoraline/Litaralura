@@ -10,10 +10,10 @@ import java.util.List;
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
     private long id;
-    @Column(name = "nombre", unique = true, nullable = false)
+    @Column(unique = true)
     private String nombre;
+
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros;
 
@@ -22,12 +22,6 @@ public class Autor {
     private Integer fallecimiento;
 
     public Autor() {
-    }
-
-    public Autor(String nombre, Integer nacimiento, Integer fallecimiento) {
-        this.nombre = nombre;
-        this.nacimiento = nacimiento;
-        this.fallecimiento = fallecimiento;
     }
 
     public Autor(AutorDTO autorDTO) {
@@ -57,6 +51,7 @@ public class Autor {
     }
 
     public void setLibros(List<Libro> libros) {
+        libros.forEach(l ->l.setAutor(this));
         this.libros = libros;
     }
 

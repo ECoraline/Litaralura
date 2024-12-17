@@ -13,5 +13,6 @@ public interface AutorRepository extends JpaRepository<Autor, Long> {
 
     // Mtodo para buscar un autor por su nombre
     Optional<Autor> findByNombreIgnoreCase(String nombre);
+
     List<Autor> findAll();
 }

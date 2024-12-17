@@ -25,16 +25,16 @@ public class Principal {
 
     LibroRepository repositorio;
 
-    public Principal(LibroRepository repositorio) {
-        this.repositorio = repositorio;
-    }
-//    AutorRepository repositorioAutor;
-
-
-//    public Principal(LibroRepository repositorio, AutorRepository repositorioAutor) {
+//    public Principal(LibroRepository repositorio) {
 //        this.repositorio = repositorio;
-//        this.repositorioAutor = repositorioAutor;
 //    }
+    AutorRepository repositorioAutor;
+
+
+    public Principal(LibroRepository repositorio, AutorRepository repositorioAutor) {
+        this.repositorio = repositorio;
+        this.repositorioAutor = repositorioAutor;
+    }
 
     public void muestraElMenu() {
         var opcion = -1;
@@ -43,6 +43,7 @@ public class Principal {
                     1 - Buscar libros
                     2 - Mostrar los libros guardados
                     3 - Mostrar autores registrados
+                    
                     0 - Salir
                     """;
             System.out.println(menu);
@@ -74,9 +75,8 @@ public class Principal {
         System.out.println("Autores encontrados:");
         autores.forEach(System.out::println);
     }
-
     private void buscarLibroWeb() {
-        System.out.println("Introduce el nombre del autor o del libro");
+        System.out.println("Introduce el nombre del libro a buscar");
         var busqueda = teclado.nextLine();
         try {
             // Buscar si el libro ya existe en la base de datos
@@ -93,27 +93,23 @@ public class Principal {
             LibroDTO datos = conversor.obtenerDatos(json, LibroDTO.class);
 
             // Verificar si el autor ya existe en la base de datos
-            Optional<Autor> autorExistente = repositorio.findAutorByNombre(datos.autores().get(0).nombre());
-
+            Optional<Autor> autorExistente = repositorioAutor.findByNombreIgnoreCase(datos.autores().get(0).nombre());
+            Autor autor;
             if (autorExistente.isPresent()) {
-                System.out.println("Autor encontrado: " + autorExistente.get());
-                // Crear la entidad Libro a partir de LibroDTO
-                Libro libro = new Libro(datos);
-                libro.setAutor(autorExistente.get()); // Asociar el autor existente al libro
-
-                // Guardar el libro en la base de datos (el autor no se vuelve a guardar porque ya existe)
-                repositorio.save(libro);
-                System.out.println("Libro guardado con éxito.");
+                autor = autorExistente.get(); // Usar el autor existente
             } else {
-                // Si el autor no existe, creamos uno nuevo
-                Autor autor = new Autor(datos.autores().get(0)); // Crear nuevo autor si no existe
-                // Crear la entidad Libro a partir de LibroDTO y asociar el autor
-                Libro libro = new Libro(datos, autor);
-
-                // Guardar el libro en la base de datos (el autor se guarda automáticamente por cascada)
-                repositorio.save(libro);
-                System.out.println("Libro guardado con éxito.");
+                autor = new Autor(datos.autores().get(0)); // Crear nuevo autor si no existe
+                autor = repositorioAutor.save(autor); // Guardar el nuevo autor para que esté gestionado
             }
+
+            // Crear la entidad Libro a partir de LibroDTO
+            Libro libro = new Libro(datos);
+            // Asociar el autor al libro
+            libro.setAutor(autor);
+
+            // Guardar el libro en la base de datos (el autor se guarda automáticamente por cascada)
+            repositorio.save(libro);
+            System.out.println("Libro guardado con éxito.");
 
         } catch (LibroDuplicadoException e) {
             System.out.println(e.getMessage());  // Mostrar mensaje específico para libro duplicado
@@ -121,6 +117,54 @@ public class Principal {
             System.out.println("Ha ocurrido un error: " + e.getMessage());
         }
     }
+
+//    private void buscarLibroWeb() {
+//        System.out.println("Introduce el nombre del libro a buscar");
+//        var busqueda = teclado.nextLine();
+//        try {
+//            // Buscar si el libro ya existe en la base de datos
+//            Optional<Libro> libroBase = repositorio.findByTituloContainsIgnoreCase(busqueda);
+//            if (libroBase.isPresent()) {
+//                throw new LibroDuplicadoException("El libro ya existe en la base de datos");
+//            }
+//
+//            // Consumir la API
+//            var json = consumoApi.consumir(URL_BASE + busqueda.replace(" ", "%20"));
+//            System.out.println(json);
+//
+//            // Deserializar el JSON a un LibroDTO (primer libro)
+//            LibroDTO datos = conversor.obtenerDatos(json, LibroDTO.class);
+//
+//            // Verificar si el autor ya existe en la base de datos
+//            Autor autorExistente = repositorioAutor.findByNombreIgnoreCase(datos.autores().get(0).nombre()).get();
+//
+//            if (autorExistente != null) {
+//                System.out.println("Autor encontrado: " + autorExistente);
+//                // Crear la entidad Libro a partir de LibroDTO
+//                Libro libro = new Libro(datos, autorExistente);
+//                 // Asociar el autor existente al libro
+//
+//                // Guardar el libro en la base de datos (el autor no se vuelve a guardar porque ya existe)
+//                repositorio.save(libro);
+//                System.out.println("Libro guardado con éxito.");
+//            } else {
+//                // Si el autor no existe, creamos uno nuevo
+//                Autor autor = new Autor(datos.autores().get(0)); // Crear nuevo autor si no existe
+//
+//                // Crear la entidad Libro a partir de LibroDTO y asociar el autor
+//                Libro libro = new Libro(datos, autor);
+//
+//                // Guardar el libro en la base de datos (el autor se guarda automáticamente por cascada)
+//                repositorio.save(libro);
+//                System.out.println("Libro guardado con éxito.");
+//            }
+//
+//        } catch (LibroDuplicadoException e) {
+//            System.out.println(e.getMessage());  // Mostrar mensaje específico para libro duplicado
+//        } catch (Exception e) {
+//            System.out.println("Ha ocurrido un error: " + e.getMessage());
+//        }
+//    }
 
 
 
