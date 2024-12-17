@@ -28,10 +28,4 @@ public class LibroService {
         this.autorRepository = autorRepository;
     }
 
-//    @Transactional
-//    public Libro guardarLibroConAutor(Libro libro, Autor autor) {
-//        autorRepository.save(autor); // Guardar el autor primero
-//        libro.setAutor(autor); // Asignar el autor al libro
-//        return libroRepository.save(libro); // Guardar el libro
-//    }
 }

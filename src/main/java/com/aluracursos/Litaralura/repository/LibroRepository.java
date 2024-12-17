@@ -14,13 +14,15 @@ import java.util.Optional;
 public interface LibroRepository extends JpaRepository<Libro, Long> {
     List<Libro> findByAutorId(Long autorId);
 
-    Optional<Libro> findByTitulo(String titulo);
     Optional<Libro> findByTituloContainsIgnoreCase(String titulo);
+
+    @Query("SELECT l FROM Libro l")
+    List<Libro> todosLosLibros();
 
     @Query("SELECT a FROM Autor a")
     List<Autor> todosLosAutores();
 
-    @Query("SELECT a FROM Autor a WHERE LOWER(a.nombre) = LOWER(:nombre)")
-    Autor findAutorByNombre(@Param("nombre") String nombre);
+    @Query("SELECT l FROM Libro l WHERE l.idioma = :idioma")
+    List<Libro> buscarPorIdioma(@Param("idioma") String idioma);
 
 }
