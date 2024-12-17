@@ -1,6 +1,7 @@
 package com.aluracursos.Litaralura;
 
 import com.aluracursos.Litaralura.Principal.Principal;
+import com.aluracursos.Litaralura.repository.AutorRepository;
 import com.aluracursos.Litaralura.repository.LibroRepository;
 import com.aluracursos.Litaralura.service.ConsumoAPI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class LitaraluraApplication implements CommandLineRunner {
 	}
 	@Autowired
 	private LibroRepository libroRepository;
+
+	@Autowired
+	private AutorRepository autorRepository;
 
 	@Override
 	public void run(String... args) throws Exception {

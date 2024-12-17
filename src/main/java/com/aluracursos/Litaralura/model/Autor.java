@@ -10,7 +10,9 @@ import java.util.List;
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private long id;
+    @Column(name = "nombre", unique = true, nullable = false)
     private String nombre;
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros;
@@ -72,5 +74,13 @@ public class Autor {
 
     public void setFallecimiento(Integer fallecimiento) {
         this.fallecimiento = fallecimiento;
+    }
+
+    @Override
+    public String toString() {
+        return "Autor: " +nombre + "\n" +
+                "Fecha de Nacimiento: " + nacimiento + "\n" +
+                "Fecha de Fallecimiento: " + fallecimiento + "\n" +
+                "Libros: " + libros.stream().map(Libro::getTitulo).reduce((a, b) -> a + ", " + b).orElse("");
     }
 }

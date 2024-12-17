@@ -23,19 +23,19 @@ public class Libro {
     public Libro() {}
 
     // Constructor que recibe un LibroDTO
-    public Libro(LibroDTO libroD, AutorDTO autor) {
+    public Libro(LibroDTO libroD, Autor autor) {
         this.titulo = libroD.titulo();
         this.idioma = libroD.idiomas().get(0);
         this.numeroDescargas = libroD.numeroDescargas() != null ? libroD.numeroDescargas() : 0;
-        this.autor = new Autor(autor);
+        this.autor = autor;
     }
 
-//    public Libro(LibroDTO datos) {
-//        this.titulo = datos.titulo();
-//        this.idioma = datos.idiomas().get(0);
-//        this.numeroDescargas = datos.numeroDescargas();
-//        this.autor = new Autor(datos.autores().get(0));
-//    }
+    public Libro(LibroDTO datos) {
+        this.titulo = datos.titulo();
+        this.idioma = datos.idiomas().get(0);
+        this.numeroDescargas = datos.numeroDescargas();
+        this.autor = new Autor(datos.autores().get(0));
+    }
 
     public Long getId() {
         return id;
@@ -78,12 +78,11 @@ public class Libro {
     }
 
     public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", idioma='" + idioma + '\'' +
-                ", numeroDescargas=" + numeroDescargas +
-                ", autor=" + autor +
-                '}';
+        return "---------- Libro --------------\n" +
+                "Titulo: " + titulo + "\n" +
+                "Autor: " + autor + '\n' +
+                "Idioma: " + idioma + '\n' +
+                "Numero de Descargas: " + numeroDescargas
+                + "\n-----------------------------\n";
     }
 }
